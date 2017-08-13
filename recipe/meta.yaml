@@ -30,6 +30,7 @@ about:
   home: https://github.com/cloudpipe/cloudpickle
   license: BSD 3-Clause
   license_file: LICENSE
+  license_url: https://github.com/cloudpipe/cloudpickle/blob/master/LICENSE
   summary: Extended pickling support for Python objects
   description: |
     cloudpickle is extended pickling support for Python objects.
