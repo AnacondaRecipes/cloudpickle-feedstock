@@ -18,6 +18,8 @@ requirements:
   build:
     - python >=3.6
     - pip
+    - setuptools
+    - wheel
 
   run:
     - python >=3.6
@@ -25,6 +27,10 @@ requirements:
 test:
   imports:
     - cloudpickle
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/cloudpipe/cloudpickle
