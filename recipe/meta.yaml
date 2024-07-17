@@ -18,12 +18,11 @@ requirements:
   host:
     - python
     - pip
-    - setuptools
-    - wheel
+    - flit-core
 
   run:
     - python
-    - flit-core
+
 
 test:
   imports:
