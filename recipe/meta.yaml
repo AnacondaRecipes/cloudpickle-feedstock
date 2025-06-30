@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/cloudpipe/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: b216fa8ae4019d5482a8ac3c95d8f6346115d8835911fd4aefd1a445e4242c64
+  sha256: f1a9fcfccfd94c5999bff2eb7fa7107eb0a2f70b8b12573fcbcf2659af7cf9c1
 
 build:
   number: 0
