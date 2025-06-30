@@ -1,5 +1,5 @@
 {% set name = "cloudpickle" %}
-{% set version = "3.0.0" %}
+{% set version = "3.1.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/cloudpipe/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 49cc8581ce305630b1e179bc083069b21b45db4731e5e3f2ea6fc40b131e1c55
+  sha256: b216fa8ae4019d5482a8ac3c95d8f6346115d8835911fd4aefd1a445e4242c64
 
 build:
   number: 0
