@@ -1,5 +1,5 @@
 {% set name = "cloudpickle" %}
-{% set version = "3.1.1" %}
+{% set version = "3.1.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,19 +7,18 @@ package:
 
 source:
   url: https://github.com/cloudpipe/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: f1a9fcfccfd94c5999bff2eb7fa7107eb0a2f70b8b12573fcbcf2659af7cf9c1
+  sha256: 7acae4307459d436eee740eea52ec9056f37b8b907d6aef7b0a97a1ccff90ff9
 
 build:
   number: 0
-  skip: true # [py<38]
-  script:  {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -v
+  skip: true  # [py<38]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -v
 
 requirements:
   host:
     - python
     - pip
     - flit-core
-
   run:
     - python
 
