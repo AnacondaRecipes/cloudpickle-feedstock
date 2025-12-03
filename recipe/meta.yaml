@@ -22,13 +22,23 @@ requirements:
   run:
     - python
 
+{% set deselect_test = " --deselect=tests/cloudpickle_file_test.py::CloudPickleFileTests::test_pickling_special_file_handles" %}
+{% set deselect_test = deselect_test + " --deselect=tests/cloudpickle_test.py::CloudPickleTest::test_pickling_file_handles" %}
+{% set deselect_test = deselect_test + " --deselect=tests/cloudpickle_test.py::Protocol2CloudPickleTest::test_pickling_file_handles" %}
+
 test:
+  source_files:
+    - tests
   imports:
     - cloudpickle
   requires:
     - pip
+    - psutil
+    - pytest
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -v tests {{ deselect_test }}
 
 about:
   home: https://github.com/cloudpipe/cloudpickle
