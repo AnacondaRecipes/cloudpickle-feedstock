@@ -10,7 +10,7 @@ source:
   sha256: 7acae4307459d436eee740eea52ec9056f37b8b907d6aef7b0a97a1ccff90ff9
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -v
 
@@ -18,7 +18,8 @@ requirements:
   host:
     - python
     - pip
-    - flit-core
+    # flit-core 4.x breaks this build; cap below 4 (PKG-18867).
+    - flit-core <4
   run:
     - python
 
@@ -50,7 +51,7 @@ about:
     cloudpickle is extended pickling support for Python objects.
     cloudpickle makes it possible to serialize Python constructs not
     supported by the default pickle module from the Python standard library.
-  doc_source_url: https://github.com/cloudpipe/cloudpickle/blob/master/README.md
+  doc_url: https://github.com/cloudpipe/cloudpickle/blob/master/README.md
   dev_url: https://github.com/cloudpipe/cloudpickle
 
 extra:
