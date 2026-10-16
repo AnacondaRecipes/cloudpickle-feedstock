@@ -10,7 +10,7 @@ source:
   sha256: 7acae4307459d436eee740eea52ec9056f37b8b907d6aef7b0a97a1ccff90ff9
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<38]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -v
 
@@ -18,7 +18,8 @@ requirements:
   host:
     - python
     - pip
-    - flit-core
+    # flit-core 4.x breaks this build; cap below 4 (PKG-18867).
+    - flit-core <4
   run:
     - python
 
@@ -33,12 +34,18 @@ test:
     - cloudpickle
   requires:
     - pip
-    - psutil
+    # pkgs/main has no py3.15 psutil (newest build is py314). Test-only;
+    # used solely by test_interactive_remote_function_calls_no_memory_leak.
+    - psutil  # [py<315]
     - pytest
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests {{ deselect_test }}
+    # tests/testutils.py imports psutil at module scope, so collection fails
+    # without it. Delay that import; the memory-leak test still needs psutil.
+    - python -c "from pathlib import Path; p=Path('tests/testutils.py'); t=p.read_text(); old=chr(10)+'import psutil'+chr(10); needle='        return psutil.Process'; assert old in t and needle in t; t=t.replace(old, chr(10), 1); p.write_text(t.replace(needle, '        import psutil'+chr(10)+needle, 1))"  # [py>=315]
+    - pytest -v tests {{ deselect_test }} -k "not test_interactive_remote_function_calls_no_memory_leak"  # [py>=315]
+    - pytest -v tests {{ deselect_test }}  # [py<315]
 
 about:
   home: https://github.com/cloudpipe/cloudpickle
@@ -50,7 +57,7 @@ about:
     cloudpickle is extended pickling support for Python objects.
     cloudpickle makes it possible to serialize Python constructs not
     supported by the default pickle module from the Python standard library.
-  doc_source_url: https://github.com/cloudpipe/cloudpickle/blob/master/README.md
+  doc_url: https://github.com/cloudpipe/cloudpickle/blob/master/README.md
   dev_url: https://github.com/cloudpipe/cloudpickle
 
 extra:
