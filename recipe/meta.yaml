@@ -34,12 +34,18 @@ test:
     - cloudpickle
   requires:
     - pip
-    - psutil
+    # pkgs/main has no py3.15 psutil (newest build is py314). Test-only;
+    # used solely by test_interactive_remote_function_calls_no_memory_leak.
+    - psutil  # [py<315]
     - pytest
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-    - pytest -v tests {{ deselect_test }}
+    # tests/testutils.py imports psutil at module scope, so collection fails
+    # without it. Delay that import; the memory-leak test still needs psutil.
+    - python -c "from pathlib import Path; p=Path('tests/testutils.py'); t=p.read_text(); old=chr(10)+'import psutil'+chr(10); needle='        return psutil.Process'; assert old in t and needle in t; t=t.replace(old, chr(10), 1); p.write_text(t.replace(needle, '        import psutil'+chr(10)+needle, 1))"  # [py>=315]
+    - pytest -v tests {{ deselect_test }} -k "not test_interactive_remote_function_calls_no_memory_leak"  # [py>=315]
+    - pytest -v tests {{ deselect_test }}  # [py<315]
 
 about:
   home: https://github.com/cloudpipe/cloudpickle
